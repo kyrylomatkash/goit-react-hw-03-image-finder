@@ -1,7 +1,7 @@
 // Імпорт бібліотеки
 import axios from 'axios';
 // API ключ
-const API_KEY = '34349761-3a6c23f95a8981b52fe6e345c'; // Replace with your Pixabay API key
+const API_KEY = '34349761-3a6c23f95a8981b52fe6e345c';
 // Отримання зображень
 const fetchImages = (query, page) => {
   return axios
