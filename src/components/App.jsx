@@ -21,7 +21,7 @@ class App extends Component {
     selectedImage: '',
     loadMore: true,
   };
-
+  // Пошук
   handleSearchSubmit = query => {
     if (!query.trim()) {
       toast.error('Please enter a search request.');
@@ -33,12 +33,10 @@ class App extends Component {
       this.fetchImages
     );
   };
-
+  // Вивантаження зображень з API
   fetchImages = () => {
     const { query, page, loadMore } = this.state;
-
     if (!loadMore) {
-      // Якщо більше не потрібно завантажувати, виходимо
       return;
     }
 
