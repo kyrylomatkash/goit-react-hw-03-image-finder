@@ -21,6 +21,14 @@ class App extends Component {
     selectedImage: '',
     loadMore: true,
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.page !== prevState.page ||
+      this.state.query !== prevState.query
+    ) {
+      this.fetchImages();
+    }
+  }
   // Пошук
   handleSearchSubmit = query => {
     if (!query.trim()) {
@@ -28,18 +36,11 @@ class App extends Component {
       return;
     }
 
-    this.setState(
-      { query, page: 1, images: [], loadMore: true },
-      this.fetchImages
-    );
+    this.setState({ query, page: 1, images: [] });
   };
   // Вивантаження зображень з API
   fetchImages = () => {
-    const { query, page, loadMore } = this.state;
-    if (!loadMore) {
-      return;
-    }
-
+    const { query, page } = this.state;
     this.setState({ isLoading: true });
 
     fetchImages(query, page)
@@ -52,7 +53,6 @@ class App extends Component {
 
         this.setState(prevState => ({
           images: [...prevState.images, ...newImages],
-          page: prevState.page + 1,
           loadMore: prevState.page < Math.ceil(response.totalHits / 12),
         }));
       })
@@ -66,7 +66,7 @@ class App extends Component {
   };
 
   handleLoadMore = () => {
-    this.fetchImages();
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   handleImageClick = imageUrl => {
