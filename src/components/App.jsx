@@ -19,6 +19,7 @@ class App extends Component {
     isLoading: false,
     showModal: false,
     selectedImage: '',
+    loadMore: true,
   };
 
   handleSearchSubmit = query => {
@@ -27,11 +28,19 @@ class App extends Component {
       return;
     }
 
-    this.setState({ query, page: 1, images: [] }, this.fetchImages);
+    this.setState(
+      { query, page: 1, images: [], loadMore: true },
+      this.fetchImages
+    );
   };
 
   fetchImages = () => {
-    const { query, page } = this.state;
+    const { query, page, loadMore } = this.state;
+
+    if (!loadMore) {
+      // Якщо більше не потрібно завантажувати, виходимо
+      return;
+    }
 
     this.setState({ isLoading: true });
 
@@ -46,6 +55,7 @@ class App extends Component {
         this.setState(prevState => ({
           images: [...prevState.images, ...newImages],
           page: prevState.page + 1,
+          loadMore: prevState.page < Math.ceil(response.totalHits / 12),
         }));
       })
       .catch(error => {
@@ -68,9 +78,11 @@ class App extends Component {
   handleCloseModal = () => {
     this.setState({ showModal: false, selectedImage: '' });
   };
+
   // Рендер
   render() {
-    const { images, isLoading, showModal, selectedImage } = this.state;
+    const { images, isLoading, showModal, selectedImage, loadMore } =
+      this.state;
 
     return (
       <Container>
@@ -83,7 +95,7 @@ class App extends Component {
             />
           )}
           {isLoading && <Loader />}
-          {images.length > 0 && (
+          {loadMore && images.length > 0 && (
             <LoadMoreButton onClick={this.handleLoadMore}>
               Load More
             </LoadMoreButton>
