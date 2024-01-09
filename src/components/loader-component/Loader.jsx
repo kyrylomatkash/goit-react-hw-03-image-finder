@@ -1,4 +1,4 @@
-// Loader.js
+// Імпорт бібліотек
 import React from 'react';
 import { Paper, CircularProgress } from '@mui/material';
 
@@ -16,5 +16,5 @@ const Loader = () => {
     </Paper>
   );
 };
-
+// Експорт
 export default Loader;
